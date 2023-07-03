@@ -24,3 +24,25 @@ def test_post_purchase_orders(test_client):
     assert response.json["id"] == 2
     assert response.json["description"] == "Purchase order id 2"
     assert len(response.json["items"]) == 0
+
+
+def test_post_empty_id(test_client):
+    response = test_client.post(
+        "/purchase_orders",
+        data=json.dumps({"description": "need error"}),
+        content_type="application/json",
+    )
+
+    assert response.status_code == 400
+    assert response.json["message"]["id"] == "Informe um id valido"
+
+
+def test_post_empty_description(test_client):
+    response = test_client.post(
+        "/purchase_orders",
+        data=json.dumps({"id": 2}),
+        content_type="application/json",
+    )
+
+    assert response.status_code == 400
+    assert response.json["message"]["description"] == "Informe uma descrição"

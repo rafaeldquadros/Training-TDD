@@ -13,9 +13,9 @@ purchase_orders = [
 
 class PurchaseOrders(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument("id", type=int, required=True, help="Informe um id")
+    parser.add_argument("id", type=int, required=True, help="Informe um id valido")
     parser.add_argument(
-        "description", type=str, required=True, help="informe uma descrição"
+        "description", type=str, required=True, help="Informe uma descrição"
     )
 
     def get(self):
