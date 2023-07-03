@@ -2,7 +2,7 @@ from db import db
 
 
 class PurchaseOrderModel(db.Model):
-    __tablename__ = "purchase_order"
+    __tablename__ = "purchase_orders"
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(500), nullable=False)
@@ -11,7 +11,7 @@ class PurchaseOrderModel(db.Model):
         self.description = description
 
     def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__}
+        return {c.key: getattr(self, c.key) for c in self.__mapper__.column_attrs}
 
     @classmethod
     def find_all(cls):
