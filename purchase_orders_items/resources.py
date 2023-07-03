@@ -1,18 +1,11 @@
 from flask import jsonify
 from flask_restful import Resource, reqparse
-
-purchase_orders = [
-    {
-        "id": 1,
-        "description": "Pedido de compra 1",
-        "items": [{"id": 1, "description": "Item do pedido 1", "price": 20.99}],
-    }
-]
+from .model import PurchaseOrderItemsModel
+from purchase_orders.model import PurchaseOrderModel
 
 
 class PurchaseOrdersItems(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument("id", type=int, required=True, help="Informe um id valido")
     parser.add_argument(
         "description", type=str, required=True, help="Informe uma descrição"
     )
@@ -21,24 +14,18 @@ class PurchaseOrdersItems(Resource):
     )
 
     def get(self, id):
-        for order in purchase_orders:
-            if order["id"] == id:
-                return jsonify(order["items"])
+        purchase_orders = PurchaseOrderItemsModel.find_by_purchase_order_id(id)
 
-        return jsonify({"message": "Pedido {} não encontrado".format(id)})
+        return [p.as_dict() for p in purchase_orders]
 
     def post(self, id):
-        req_data = PurchaseOrdersItems.parser.parse_args()
+        purchase_orders = PurchaseOrderModel.find_by_id(id)
+        if purchase_orders:
+            data = PurchaseOrdersItems.parser.parse_args()
+            data["purchase_order_id"] = id
 
-        obj = {
-            "id": req_data["id"],
-            "description": req_data["description"],
-            "price": req_data["price"],
-        }
+            purchase_orders_items = PurchaseOrderItemsModel(**data)
+            purchase_orders_items.save()
 
-        for order in purchase_orders:
-            if order["id"] == id:
-                order["items"].append(obj)
-                return jsonify(order)
-
+            return purchase_orders_items.as_dict()
         return jsonify({"message": "Pedido {} não encontrado".format(id)})
