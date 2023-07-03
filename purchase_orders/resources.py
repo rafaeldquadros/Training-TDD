@@ -33,3 +33,12 @@ class PurchaseOrders(Resource):
         purchase_orders.append(purchase_order)
 
         return jsonify(purchase_order)
+
+
+class PurchaseOrdersById(Resource):
+    def get(self, id):
+        for order in purchase_orders:
+            if order["id"] == id:
+                return jsonify(order)
+
+        return jsonify({"message": "Pedido {} não encontrado".format(id)})

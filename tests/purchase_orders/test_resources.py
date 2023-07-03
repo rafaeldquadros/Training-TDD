@@ -46,3 +46,23 @@ def test_post_empty_description(test_client):
 
     assert response.status_code == 400
     assert response.json["message"]["description"] == "Informe uma descrição"
+
+
+def test_get_purchase_orders_by_id(test_client):
+    response = test_client.get("/purchase_orders/1")
+
+    assert response.status_code == 200
+    assert response.json["id"] == 1
+    assert response.json["description"] == "Pedido de compra 1"
+    assert len(response.json["items"]) == 1
+    assert response.json["items"][0]["id"] == 1
+    assert response.json["items"][0]["description"] == "Item do pedido 1"
+    assert response.json["items"][0]["price"] == 20.99
+
+
+def test_get_purchase_orders_by_id_invalid(test_client):
+    id = 333
+    response = test_client.get("/purchase_orders/{}".format(id))
+
+    assert response.status_code == 200
+    assert response.json["message"] == "Pedido {} não encontrado".format(id)
