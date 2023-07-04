@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from purchase_orders.resources import PurchaseOrders, PurchaseOrdersById
 from purchase_orders_items.resources import PurchaseOrdersItems
+from users.resources import UserCreation, UserLogin
 from db import db
 import os
 
@@ -24,6 +25,8 @@ def create_app():
     api.add_resource(PurchaseOrders, "/purchase_orders")
     api.add_resource(PurchaseOrdersById, "/purchase_orders/<int:id>")
     api.add_resource(PurchaseOrdersItems, "/purchase_orders/<int:id>/items")
+    api.add_resource(UserCreation, "/users")
+    api.add_resource(UserLogin, "/login")
 
     def create_tables():
         db.create_all()

@@ -1,5 +1,5 @@
 from passlib.hash import pbkdf2_sha256
-from flask_jwt_extended import create_access_tokens
+from flask_jwt_extended import create_access_token
 
 from .model import UsersModel
 from .exceptions import (
@@ -25,7 +25,7 @@ class UsersService:
     def login(self, **kwargs):
         user = UsersModel.find_user_email(kwargs["email"])
         if user and pbkdf2_sha256.verify(kwargs["password"], user.password):
-            token = create_access_tokens(identity=user.id)
+            token = create_access_token(identity=user.id)
             return {"access_token": token}
 
         raise UserEmailOrPasswordInvalidExcpetion("Usuário ou senha invalidos")
