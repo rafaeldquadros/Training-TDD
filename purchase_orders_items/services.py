@@ -1,6 +1,5 @@
 from .model import PurchaseOrderItemsModel
-from ..purchase_orders.model import PurchaseOrderModel
-from resources import PurchaseOrdersItems
+from purchase_orders.model import PurchaseOrderModel
 from flask import jsonify
 
 

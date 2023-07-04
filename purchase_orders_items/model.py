@@ -10,11 +10,13 @@ class PurchaseOrderItemsModel(db.Model):
     purchase_order_id = db.Column(
         db.Integer, db.ForeignKey("purchase_orders.id"), nullable=False
     )
+    quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, description, price, purchase_order_id):
+    def __init__(self, description, price, purchase_order_id, quantity):
         self.description = description
         self.price = price
         self.purchase_order_id = purchase_order_id
+        self.quantity = quantity
 
     def as_dict(self):
         return {c.key: getattr(self, c.key) for c in self.__mapper__.column_attrs}
