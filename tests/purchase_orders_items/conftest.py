@@ -10,7 +10,7 @@ def seed_db():
     db.session.add(po)
     db.session.commit()
 
-    poi = PurchaseOrderItemsModel("item 1", 10.39, po.id, 50)
+    poi = PurchaseOrderItemsModel("item 1", 10.39, po.id, 30)
     db.session.add(poi)
     db.session.commit()
 

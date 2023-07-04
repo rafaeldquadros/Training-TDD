@@ -22,7 +22,7 @@ def test_get_purchase_order_item_invalid_id(test_client):
 
 
 def test_post_purchase_order_item(test_client, seed_db):
-    obj = {"description": "pedido de alguma coisa", "price": 20.99, "quantity": 50}
+    obj = {"description": "pedido de alguma coisa", "price": 20.99, "quantity": 5}
     response = test_client.post(
         "/purchase_orders/{}/items".format(seed_db["purchase_order"].id),
         data=json.dumps(obj),
@@ -36,14 +36,25 @@ def test_post_purchase_order_item(test_client, seed_db):
     assert response.json["quantity"] == obj["quantity"]
 
 
+def test_post_purchase_order_item_invalid_quantity(test_client, seed_db):
+    obj = {"description": "pedido de alguma coisa", "price": 20.99, "quantity": 60}
+    response = test_client.post(
+        "/purchase_orders/{}/items".format(seed_db["purchase_order"].id),
+        data=json.dumps(obj),
+        content_type="application/json",
+    )
+
+    assert response.status_code == 400
+    assert response.json["message"] == "A quantidade não pode exceder 50 itens!"
+
+
 def test_post_purchase_order_item_invalid_id(test_client):
     obj = {
-        "id": 2,
         "description": "pedido de alguma coisa",
         "price": 20.99,
         "quantity": 50,
     }
-    id = 29
+    id = 10020
     response = test_client.post(
         "/purchase_orders/{}/items".format(id),
         data=json.dumps(obj),
