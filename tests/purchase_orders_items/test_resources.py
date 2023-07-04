@@ -22,7 +22,7 @@ def test_get_purchase_order_item_invalid_id(test_client):
 
 
 def test_post_purchase_order_item(test_client, seed_db):
-    obj = {"description": "pedido de alguma coisa", "price": 20.99}
+    obj = {"description": "pedido de alguma coisa", "price": 20.99, "quantity": 50}
     response = test_client.post(
         "/purchase_orders/{}/items".format(seed_db["purchase_order"].id),
         data=json.dumps(obj),
@@ -33,10 +33,16 @@ def test_post_purchase_order_item(test_client, seed_db):
     assert response.json["id"] is not None
     assert response.json["description"] == obj["description"]
     assert response.json["price"] == obj["price"]
+    assert response.json["quantity"] == obj["quantity"]
 
 
 def test_post_purchase_order_item_invalid_id(test_client):
-    obj = {"id": 2, "description": "pedido de alguma coisa", "price": 20.99}
+    obj = {
+        "id": 2,
+        "description": "pedido de alguma coisa",
+        "price": 20.99,
+        "quantity": 50,
+    }
     id = 29
     response = test_client.post(
         "/purchase_orders/{}/items".format(id),
