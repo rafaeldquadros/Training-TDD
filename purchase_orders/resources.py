@@ -8,6 +8,9 @@ class PurchaseOrders(Resource):
     parser.add_argument(
         "description", type=str, required=True, help="Informe uma descrição"
     )
+    parser.add_argument(
+        "quantity", type=int, required=True, help="Informe uma quantidade"
+    )
 
     def get(self):
         purchase_order = PurchaseOrderModel.find_all()
